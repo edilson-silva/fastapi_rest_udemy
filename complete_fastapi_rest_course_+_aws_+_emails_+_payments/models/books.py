@@ -1,5 +1,6 @@
-from connection.database import Base
 from sqlalchemy import Column, Integer, String
+
+from ..connection.database import Base
 
 
 class BookModel(Base):
