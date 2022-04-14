@@ -3,7 +3,7 @@ from typing import Optional
 from pydantic import BaseModel
 
 
-class BookModel(BaseModel):
+class BookSchema(BaseModel):
     id: Optional[int]
     title: str
     author: str

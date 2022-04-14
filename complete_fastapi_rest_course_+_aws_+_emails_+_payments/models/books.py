@@ -2,7 +2,7 @@ from connection.database import Base
 from sqlalchemy import Column, Integer, String
 
 
-class BookSchema(Base):
+class BookModel(Base):
     __tablename__ = "books"
 
     id = Column(Integer, primary_key=True, index=True)
