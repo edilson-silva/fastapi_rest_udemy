@@ -16,7 +16,7 @@ async def home():
 
 
 @app.get("/books", response_model=List[BookSchema])
-async def get_books(db: Session = Depends(get_db_connection)):
+async def books_list(db: Session = Depends(get_db_connection)):
     return db.query(BookModel).all()
 
 
