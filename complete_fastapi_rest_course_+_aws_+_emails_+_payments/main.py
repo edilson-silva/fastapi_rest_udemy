@@ -20,6 +20,11 @@ async def books_list(db: Session = Depends(get_db_connection)):
     return db.query(BookModel).all()
 
 
+@app.get("/books/{book_id}", response_model=BookSchema)
+async def books_list(book_id: int, db: Session = Depends(get_db_connection)):
+    return db.query(BookModel).filter(BookModel.id == book_id).first()
+
+
 @app.post("/books")
 async def books_create(book: BookSchema, db: Session = Depends(get_db_connection)):
     book_model = BookModel(**book.dict())
