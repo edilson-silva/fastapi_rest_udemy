@@ -22,7 +22,7 @@ async def books_list(db: Session = Depends(get_db_connection)):
 
 
 @app.get("/books/{book_id}", response_model=BookSchema)
-async def books_list(book_id: int, db: Session = Depends(get_db_connection)):
+async def books_get(book_id: int, db: Session = Depends(get_db_connection)):
     return db.query(BookModel).filter(BookModel.id == book_id).first()
 
 
