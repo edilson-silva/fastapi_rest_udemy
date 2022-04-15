@@ -1,6 +1,7 @@
 from typing import List
 
 from fastapi import Depends, FastAPI
+from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 
 from .connection.database import get_db_connection
@@ -32,3 +33,14 @@ async def books_create(book: BookSchema, db: Session = Depends(get_db_connection
     db.commit()
     db.refresh(book_model)
     return book_model
+
+
+@app.delete("/books/{book_id}")
+async def books_delete(book_id: int, db: Session = Depends(get_db_connection)):
+    deleted = db.query(BookModel).filter(BookModel.id == book_id).delete()
+    db.commit()
+
+    if deleted:
+        return {"message": "book deleted"}
+
+    return JSONResponse(content={"message": "book not found"}, status_code=404)
