@@ -2,12 +2,11 @@ from typing import List
 
 from fastapi import Depends, FastAPI
 from fastapi.responses import JSONResponse
-from sqlalchemy import delete
 from sqlalchemy.orm import Session
 
-from .connection.database import get_db_connection
-from .models.books import BookModel
-from .schemas.books import BookSchema
+from src.connection.database import get_db_connection
+from src.models.books import BookModel
+from src.schemas.books import BookSchema
 
 app = FastAPI()
 
