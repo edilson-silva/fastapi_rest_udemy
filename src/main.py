@@ -106,3 +106,14 @@ async def readers_update(
         return {"message": "reader updated"}
 
     return JSONResponse(content={"message": "reader not found"}, status_code=404)
+
+
+@app.delete("/readers/{reader_id}")
+async def readers_delete(reader_id: int, db: Session = Depends(get_db_connection)):
+    deleted = db.query(ReaderModel).filter(ReaderModel.id == reader_id).delete()
+    db.commi()
+
+    if deleted:
+        return {"message": "reader' deleted"}
+
+    return JSONResponse(content={"message": "reader not found"}, status_code=404)
