@@ -70,5 +70,5 @@ async def books_delete(book_id: int, db: Session = Depends(get_db_connection)):
 
 
 @app.get("/readers", response_model=List[ReaderSchema])
-async def books_list(db: Session = Depends(get_db_connection)):
+async def readers_list(db: Session = Depends(get_db_connection)):
     return db.query(ReaderModel).all()
