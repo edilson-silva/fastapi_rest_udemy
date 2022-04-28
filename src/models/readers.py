@@ -2,7 +2,7 @@ from sqlalchemy import Column, Integer, String
 from src.connection.database import Base
 
 
-class Readers(Base):
+class ReaderModel(Base):
     __tablename__ = "readers"
 
     id = Column(Integer, primary_key=True, index=True)
