@@ -4,11 +4,16 @@ from fastapi import Depends, FastAPI
 from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 
-from src.connection.database import get_db_connection
+from src.connection.database import get_db_connection, init_db
 from src.models.books import BookModel
 from src.schemas.books import BookSchema
 
 app = FastAPI()
+
+
+@app.on_event("startup")
+def on_startup():
+    init_db()
 
 
 @app.get("/")
