@@ -1,3 +1,5 @@
+from asyncore import read
+from turtle import up
 from typing import List
 
 from fastapi import Depends, FastAPI
@@ -88,3 +90,21 @@ async def readers_create(
     db.commit()
     db.refresh(reader_model)
     return reader_model
+
+
+@app.put("/readers/{reader_id}")
+async def readers_update(
+    reader_id: int, reader: ReaderSchema, db: Session = Depends(get_db_connection)
+):
+    reader = reader.dict()
+    del reader["id"]
+
+    updated = (
+        db.query(ReaderModel).filter(ReaderModel.id == reader_id).update(values=reader)
+    )
+    db.commit()
+
+    if updated:
+        return {"message": "reader updated"}
+
+    return JSONResponse(content={"message": "reader not found"}, status_code=404)
