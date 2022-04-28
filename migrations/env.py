@@ -6,7 +6,8 @@ from alembic import context
 from dotenv import find_dotenv, load_dotenv
 from sqlalchemy import engine_from_config, pool
 from src.connection.database import Base
-from src.models import *
+from src.models.books import *
+from src.models.readers import *
 
 load_dotenv(find_dotenv("src/"))
 
