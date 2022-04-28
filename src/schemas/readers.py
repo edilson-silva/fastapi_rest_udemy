@@ -3,11 +3,10 @@ from typing import Optional
 from pydantic import BaseModel
 
 
-class BookSchema(BaseModel):
+class ReaderSchema(BaseModel):
     id: Optional[int]
-    title: str
-    author: str
-    reader_id: int
+    first_name: str
+    last_name: str
 
     class Config:
         orm_mode = True

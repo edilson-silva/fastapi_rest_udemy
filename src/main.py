@@ -6,7 +6,9 @@ from sqlalchemy.orm import Session
 
 from src.connection.database import get_db_connection, init_db
 from src.models.books import BookModel
+from src.models.readers import ReaderModel
 from src.schemas.books import BookSchema
+from src.schemas.readers import ReaderSchema
 
 app = FastAPI()
 
@@ -65,3 +67,53 @@ async def books_delete(book_id: int, db: Session = Depends(get_db_connection)):
         return {"message": "book deleted"}
 
     return JSONResponse(content={"message": "book not found"}, status_code=404)
+
+
+@app.get("/readers", response_model=List[ReaderSchema])
+async def readers_list(db: Session = Depends(get_db_connection)):
+    return db.query(ReaderModel).all()
+
+
+@app.get("/readers/{reader_id}", response_model=ReaderSchema)
+async def readers_get(reader_id: int, db: Session = Depends(get_db_connection)):
+    return db.query(ReaderModel).filter(ReaderModel.id == reader_id).first()
+
+
+@app.post("/readers")
+async def readers_create(
+    reader: ReaderSchema, db: Session = Depends(get_db_connection)
+):
+    reader_model = ReaderModel(**reader.dict())
+    db.add(reader_model)
+    db.commit()
+    db.refresh(reader_model)
+    return reader_model
+
+
+@app.put("/readers/{reader_id}")
+async def readers_update(
+    reader_id: int, reader: ReaderSchema, db: Session = Depends(get_db_connection)
+):
+    reader = reader.dict()
+    del reader["id"]
+
+    updated = (
+        db.query(ReaderModel).filter(ReaderModel.id == reader_id).update(values=reader)
+    )
+    db.commit()
+
+    if updated:
+        return {"message": "reader updated"}
+
+    return JSONResponse(content={"message": "reader not found"}, status_code=404)
+
+
+@app.delete("/readers/{reader_id}")
+async def readers_delete(reader_id: int, db: Session = Depends(get_db_connection)):
+    deleted = db.query(ReaderModel).filter(ReaderModel.id == reader_id).delete()
+    db.commi()
+
+    if deleted:
+        return {"message": "reader' deleted"}
+
+    return JSONResponse(content={"message": "reader not found"}, status_code=404)
