@@ -6,7 +6,9 @@ from sqlalchemy.orm import Session
 
 from src.connection.database import get_db_connection, init_db
 from src.models.books import BookModel
+from src.models.readers import ReaderModel
 from src.schemas.books import BookSchema
+from src.schemas.readers import ReaderSchema
 
 app = FastAPI()
 
@@ -65,3 +67,8 @@ async def books_delete(book_id: int, db: Session = Depends(get_db_connection)):
         return {"message": "book deleted"}
 
     return JSONResponse(content={"message": "book not found"}, status_code=404)
+
+
+@app.get("/readers", response_model=List[ReaderSchema])
+async def books_list(db: Session = Depends(get_db_connection)):
+    return db.query(ReaderModel).all()
