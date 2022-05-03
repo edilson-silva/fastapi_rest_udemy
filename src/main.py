@@ -2,6 +2,7 @@ from typing import List
 
 from fastapi import Depends, FastAPI
 from fastapi.responses import JSONResponse
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from src.connection.database import get_db_connection, init_db
@@ -35,11 +36,14 @@ async def books_get(book_id: int, db: Session = Depends(get_db_connection)):
 
 @app.post("/books")
 async def books_create(book: BookSchema, db: Session = Depends(get_db_connection)):
-    book_model = BookModel(**book.dict())
-    db.add(book_model)
-    db.commit()
-    db.refresh(book_model)
-    return book_model
+    try:
+        book_model = BookModel(**book.dict())
+        db.add(book_model)
+        db.commit()
+        db.refresh(book_model)
+        return book_model
+    except IntegrityError:
+        return JSONResponse(content={"message": "invalid book reader"}, status_code=400)
 
 
 @app.put("/books/{book_id}")
