@@ -126,8 +126,13 @@ async def readers_delete(reader_id: int, db: Session = Depends(get_db_connection
 async def readers_books_create(
     reader_book: ReaderBookSchema, db: Session = Depends(get_db_connection)
 ):
-    reader_book_model = ReaderBookModel(**reader_book.dict())
-    db.add(reader_book_model)
-    db.commit()
-    db.refresh(reader_book_model)
-    return reader_book_model
+    try:
+        reader_book_model = ReaderBookModel(**reader_book.dict())
+        db.add(reader_book_model)
+        db.commit()
+        db.refresh(reader_book_model)
+        return reader_book_model
+    except IntegrityError:
+        return JSONResponse(
+            content={"message": "send a valid reader and book ids"}, status_code=400
+        )
