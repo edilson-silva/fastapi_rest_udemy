@@ -38,14 +38,11 @@ async def books_get(book_id: int, db: Session = Depends(get_db_connection)):
 
 @app.post("/books")
 async def books_create(book: BookSchema, db: Session = Depends(get_db_connection)):
-    try:
-        book_model = BookModel(**book.dict())
-        db.add(book_model)
-        db.commit()
-        db.refresh(book_model)
-        return book_model
-    except IntegrityError:
-        return JSONResponse(content={"message": "invalid book reader"}, status_code=400)
+    book_model = BookModel(**book.dict())
+    db.add(book_model)
+    db.commit()
+    db.refresh(book_model)
+    return book_model
 
 
 @app.put("/books/{book_id}")
@@ -129,7 +126,7 @@ async def readers_delete(reader_id: int, db: Session = Depends(get_db_connection
 async def readers_books_create(
     reader_book: ReaderBookSchema, db: Session = Depends(get_db_connection)
 ):
-    reader_book_model = ReaderBookSchema(**reader_book.dict())
+    reader_book_model = ReaderBookModel(**reader_book.dict())
     db.add(reader_book_model)
     db.commit()
     db.refresh(reader_book_model)
