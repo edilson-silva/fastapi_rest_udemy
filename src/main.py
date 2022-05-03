@@ -8,8 +8,10 @@ from sqlalchemy.orm import Session
 from src.connection.database import get_db_connection, init_db
 from src.models.books import BookModel
 from src.models.readers import ReaderModel
+from src.models.readers_books import ReaderBookModel
 from src.schemas.books import BookSchema
 from src.schemas.readers import ReaderSchema
+from src.schemas.readers_books import ReaderBookSchema
 
 app = FastAPI()
 
@@ -36,14 +38,11 @@ async def books_get(book_id: int, db: Session = Depends(get_db_connection)):
 
 @app.post("/books")
 async def books_create(book: BookSchema, db: Session = Depends(get_db_connection)):
-    try:
-        book_model = BookModel(**book.dict())
-        db.add(book_model)
-        db.commit()
-        db.refresh(book_model)
-        return book_model
-    except IntegrityError:
-        return JSONResponse(content={"message": "invalid book reader"}, status_code=400)
+    book_model = BookModel(**book.dict())
+    db.add(book_model)
+    db.commit()
+    db.refresh(book_model)
+    return book_model
 
 
 @app.put("/books/{book_id}")
@@ -121,3 +120,19 @@ async def readers_delete(reader_id: int, db: Session = Depends(get_db_connection
         return {"message": "reader' deleted"}
 
     return JSONResponse(content={"message": "reader not found"}, status_code=404)
+
+
+@app.post("/readers_books")
+async def readers_books_create(
+    reader_book: ReaderBookSchema, db: Session = Depends(get_db_connection)
+):
+    try:
+        reader_book_model = ReaderBookModel(**reader_book.dict())
+        db.add(reader_book_model)
+        db.commit()
+        db.refresh(reader_book_model)
+        return reader_book_model
+    except IntegrityError:
+        return JSONResponse(
+            content={"message": "send a valid reader and book ids"}, status_code=400
+        )
