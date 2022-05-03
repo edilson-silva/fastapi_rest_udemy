@@ -111,7 +111,7 @@ async def readers_update(
 @app.delete("/readers/{reader_id}")
 async def readers_delete(reader_id: int, db: Session = Depends(get_db_connection)):
     deleted = db.query(ReaderModel).filter(ReaderModel.id == reader_id).delete()
-    db.commi()
+    db.commit()
 
     if deleted:
         return {"message": "reader' deleted"}
