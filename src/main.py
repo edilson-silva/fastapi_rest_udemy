@@ -9,9 +9,11 @@ from src.connection.database import get_db_connection, init_db
 from src.models.books import BookModel
 from src.models.readers import ReaderModel
 from src.models.readers_books import ReaderBookModel
+from src.models.users import UserModel
 from src.schemas.books import BookSchema
 from src.schemas.readers import ReaderSchema
 from src.schemas.readers_books import ReaderBookSchema
+from src.schemas.users import UserRegisterSchema
 
 app = FastAPI()
 
@@ -136,3 +138,14 @@ async def readers_books_create(
         return JSONResponse(
             content={"message": "send a valid reader and book ids"}, status_code=400
         )
+
+
+@app.post("/users")
+async def users_create(
+    reader: UserRegisterSchema, db: Session = Depends(get_db_connection)
+):
+    user_model = UserModel(**reader.dict())
+    db.add(user_model)
+    db.commit()
+    db.refresh(user_model)
+    return user_model
