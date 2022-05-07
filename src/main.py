@@ -146,8 +146,8 @@ async def readers_books_create(
 async def users_create(
     user: UserRegisterSchema, db: Session = Depends(get_db_connection)
 ):
-    crypt = Crypt(user.password)
-    user.password = crypt.get_hashed_password()
+    crypt = Crypt()
+    user.password = crypt.get_hashed_password(user.password)
 
     user_model = UserModel(**user.dict())
     db.add(user_model)
