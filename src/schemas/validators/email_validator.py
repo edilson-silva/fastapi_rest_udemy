@@ -9,6 +9,7 @@ class EmailValidatorSchema(str):
     @classmethod
     def validate(cls, value) -> str:
         try:
+            value = value.strip().lower()
             validate_email(value)
             return value
         except EmailNotValidError:
