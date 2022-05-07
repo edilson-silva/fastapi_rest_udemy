@@ -144,15 +144,12 @@ async def readers_books_create(
 
 @app.post("/users")
 async def users_create(
-    reader: UserRegisterSchema, db: Session = Depends(get_db_connection)
+    user: UserRegisterSchema, db: Session = Depends(get_db_connection)
 ):
-    user_data = reader.dict()
-    user_password = user_data["password"]
+    crypt = Crypt(user.password)
+    user.password = crypt.get_hashed_password()
 
-    crypt = Crypt(user_password)
-    user_data["password"] = crypt.get_hashed_password()
-
-    user_model = UserModel(**user_data)
+    user_model = UserModel(**user.dict())
     db.add(user_model)
     db.commit()
     db.refresh(user_model)
