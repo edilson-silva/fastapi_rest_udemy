@@ -9,6 +9,7 @@ from src.connection.database import Base
 from src.models.books import *
 from src.models.readers import *
 from src.models.readers_books import *
+from src.models.users import *
 
 load_dotenv(find_dotenv("src/"))
 
