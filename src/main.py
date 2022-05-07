@@ -157,4 +157,5 @@ async def users_create(
     db.commit()
     db.refresh(user_model)
 
+    del user_model.password
     return user_model
