@@ -146,6 +146,13 @@ async def readers_books_create(
 async def users_create(
     user: UserRegisterSchema, db: Session = Depends(get_db_connection)
 ):
+    found_user = db.query(UserModel).filter(UserModel.email == user.email).first()
+
+    if found_user:
+        return JSONResponse(
+            content={"message": "email already in use"}, status_code=404
+        )
+
     crypt = Crypt()
     user.password = crypt.get_hashed_password(user.password)
 
