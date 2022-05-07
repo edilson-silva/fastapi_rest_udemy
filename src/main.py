@@ -2,9 +2,11 @@ from typing import List
 
 from fastapi import Depends, FastAPI
 from fastapi.responses import JSONResponse
+from platformdirs import user_data_dir
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
+from src.auth.crypt import Crypt
 from src.connection.database import get_db_connection, init_db
 from src.models.books import BookModel
 from src.models.readers import ReaderModel
@@ -144,8 +146,15 @@ async def readers_books_create(
 async def users_create(
     reader: UserRegisterSchema, db: Session = Depends(get_db_connection)
 ):
-    user_model = UserModel(**reader.dict())
+    user_data = reader.dict()
+    user_password = user_data["password"]
+
+    crypt = Crypt(user_password)
+    user_data["password"] = crypt.get_hashed_password()
+
+    user_model = UserModel(**user_data)
     db.add(user_model)
     db.commit()
     db.refresh(user_model)
+
     return user_model
