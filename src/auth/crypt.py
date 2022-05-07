@@ -7,4 +7,4 @@ class Crypt:
         self.password = password
 
     def get_hashed_password(self):
-        return self.__pwd_context.hash(self.passowrd)
+        return self.__pwd_context.hash(self.password)
