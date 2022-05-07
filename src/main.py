@@ -7,6 +7,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from src.auth.crypt import Crypt
+from src.auth.token import generate_token
 from src.connection.database import get_db_connection, init_db
 from src.models.books import BookModel
 from src.models.readers import ReaderModel
@@ -161,5 +162,4 @@ async def users_create(
     db.commit()
     db.refresh(user_model)
 
-    del user_model.password
-    return user_model
+    return {"token": generate_token(user_model)}
