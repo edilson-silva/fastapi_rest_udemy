@@ -79,7 +79,9 @@ async def books_delete(book_id: int, db: Session = Depends(get_db_connection)):
     return JSONResponse(content={"message": "book not found"}, status_code=404)
 
 
-@app.get("/readers", response_model=List[ReaderSchema])
+@app.get(
+    "/readers", response_model=List[ReaderSchema], dependencies=[Depends(oauth2_scheme)]
+)
 async def readers_list(db: Session = Depends(get_db_connection)):
     return db.query(ReaderModel).all()
 
