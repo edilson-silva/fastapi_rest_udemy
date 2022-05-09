@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 from os import environ
 
-from jwt import encode as jwt_encode
+from jwt import encode
 from src.schemas.users import UserSchema
 
 TOKEN_ALGORITHM = "HS256"
@@ -18,7 +18,7 @@ def generate_token(user: UserSchema) -> str:
     """
     try:
         payload = {"sub": user.id, "exp": datetime.utcnow() + timedelta(minutes=5)}
-        return jwt_encode(
+        return encode(
             payload=payload,
             key=environ.get("JWT_SECRET_KEY"),
             algorithm=TOKEN_ALGORITHM,
