@@ -2,7 +2,6 @@ from typing import List
 
 from fastapi import Depends, FastAPI, status
 from fastapi.responses import JSONResponse
-from platformdirs import user_data_dir
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
