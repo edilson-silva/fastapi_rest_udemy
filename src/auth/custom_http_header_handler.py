@@ -8,6 +8,7 @@ from jwt import ExpiredSignatureError, InvalidTokenError, decode
 from src.connection.database import get_db_connection
 from src.models.users import UserModel
 
+from ..util.user_roles import UserRoles
 from .token import TOKEN_ALGORITHM
 
 
@@ -48,4 +49,12 @@ class CustomHTTPHeaderHandler(HTTPBearer):
         except InvalidTokenError:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token"
+            )
+
+    async def is_admin(self, request: Request):
+        user: UserModel = request.state.user
+
+        if not user or user.role != UserRoles.ADMIN:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED, detail="Unauthorized user"
             )
