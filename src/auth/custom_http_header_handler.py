@@ -1,7 +1,7 @@
 from os import environ
 from typing import Optional
 
-from fastapi import HTTPException, Request
+from fastapi import HTTPException, Request, status
 from fastapi.security import HTTPBearer
 from fastapi.security.http import HTTPAuthorizationCredentials
 from jwt import ExpiredSignatureError, InvalidTokenError, decode
@@ -32,13 +32,20 @@ class CustomHTTPHeaderHandler(HTTPBearer):
             user = self.db.query(UserModel).filter(UserModel.id == user_id).first()
 
             if not user:
-                raise HTTPException(status_code=403, detail="Not authenticated")
+                raise HTTPException(
+                    status_code=status.HTTP_403_FORBIDDEN, detail="Not authenticated"
+                )
+                codes
 
             request.state.user = user
 
             return payload
 
         except ExpiredSignatureError:
-            raise HTTPException(status_code=401, detail="Token is expired")
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED, detail="Token is expired"
+            )
         except InvalidTokenError:
-            raise HTTPException(status_code=401, detail="Invalid token")
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token"
+            )
