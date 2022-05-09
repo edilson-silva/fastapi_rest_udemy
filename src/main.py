@@ -125,7 +125,9 @@ async def readers_update(
     if updated:
         return {"message": "reader updated"}
 
-    return JSONResponse(content={"message": "reader not found"}, status_code=404)
+    return JSONResponse(
+        content={"message": "reader not found"}, status_code=status.HTTP_404_NOT_FOUND
+    )
 
 
 @app.delete("/readers/{reader_id}", dependencies=[Depends(oauth2_scheme)])
