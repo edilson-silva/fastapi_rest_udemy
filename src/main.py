@@ -159,7 +159,7 @@ async def readers_books_create(
         )
 
 
-@app.post("/users")
+@app.post("/users", dependencies=[Depends(oauth2_scheme)])
 async def users_create(
     user: UserRegisterSchema, db: Session = Depends(get_db_connection)
 ):
