@@ -7,6 +7,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from src.auth.crypt import Crypt
+from src.auth.custom_http_header_handler import CustomHTTPHeaderHandler
 from src.auth.token import generate_token
 from src.connection.database import get_db_connection, init_db
 from src.models.books import BookModel
@@ -19,6 +20,7 @@ from src.schemas.readers_books import ReaderBookSchema
 from src.schemas.users import UserRegisterSchema
 
 app = FastAPI()
+oauth2_scheme = CustomHTTPHeaderHandler()
 
 
 @app.on_event("startup")
@@ -41,7 +43,7 @@ async def books_get(book_id: int, db: Session = Depends(get_db_connection)):
     return db.query(BookModel).filter(BookModel.id == book_id).first()
 
 
-@app.post("/books")
+@app.post("/books", dependencies=[Depends(oauth2_scheme)])
 async def books_create(book: BookSchema, db: Session = Depends(get_db_connection)):
     book_model = BookModel(**book.dict())
     db.add(book_model)
