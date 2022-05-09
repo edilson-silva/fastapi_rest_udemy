@@ -138,7 +138,9 @@ async def readers_delete(reader_id: int, db: Session = Depends(get_db_connection
     if deleted:
         return {"message": "reader' deleted"}
 
-    return JSONResponse(content={"message": "reader not found"}, status_code=404)
+    return JSONResponse(
+        content={"message": "reader not found"}, status_code=status.HTTP_404_NOT_FOUND
+    )
 
 
 @app.post("/readers_books", dependencies=[Depends(oauth2_scheme)])
