@@ -86,7 +86,11 @@ async def readers_list(db: Session = Depends(get_db_connection)):
     return db.query(ReaderModel).all()
 
 
-@app.get("/readers/{reader_id}", response_model=ReaderSchema)
+@app.get(
+    "/readers/{reader_id}",
+    response_model=ReaderSchema,
+    dependencies=[Depends(oauth2_scheme)],
+)
 async def readers_get(reader_id: int, db: Session = Depends(get_db_connection)):
     return db.query(ReaderModel).filter(ReaderModel.id == reader_id).first()
 
