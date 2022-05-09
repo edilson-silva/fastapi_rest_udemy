@@ -155,7 +155,8 @@ async def readers_books_create(
         return reader_book_model
     except IntegrityError:
         return JSONResponse(
-            content={"message": "send a valid reader and book ids"}, status_code=400
+            content={"message": "send a valid reader and book ids"},
+            status_code=status.HTTP_400_BAD_REQUEST,
         )
 
 
