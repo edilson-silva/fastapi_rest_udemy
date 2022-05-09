@@ -36,7 +36,6 @@ class CustomHTTPHeaderHandler(HTTPBearer):
                 raise HTTPException(
                     status_code=status.HTTP_403_FORBIDDEN, detail="Not authenticated"
                 )
-                codes
 
             request.state.user = user
 
