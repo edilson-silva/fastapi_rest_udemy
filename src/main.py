@@ -95,7 +95,7 @@ async def readers_get(reader_id: int, db: Session = Depends(get_db_connection)):
     return db.query(ReaderModel).filter(ReaderModel.id == reader_id).first()
 
 
-@app.post("/readers")
+@app.post("/readers", dependencies=[Depends(oauth2_scheme)])
 async def readers_create(
     reader: ReaderSchema, db: Session = Depends(get_db_connection)
 ):
