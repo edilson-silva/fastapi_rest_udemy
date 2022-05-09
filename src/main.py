@@ -124,7 +124,7 @@ async def readers_update(
     return JSONResponse(content={"message": "reader not found"}, status_code=404)
 
 
-@app.delete("/readers/{reader_id}")
+@app.delete("/readers/{reader_id}", dependencies=[Depends(oauth2_scheme)])
 async def readers_delete(reader_id: int, db: Session = Depends(get_db_connection)):
     deleted = db.query(ReaderModel).filter(ReaderModel.id == reader_id).delete()
     db.commit()
