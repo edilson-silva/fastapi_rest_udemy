@@ -1,6 +1,6 @@
 from typing import List
 
-from fastapi import Depends, FastAPI
+from fastapi import Depends, FastAPI, status
 from fastapi.responses import JSONResponse
 from platformdirs import user_data_dir
 from sqlalchemy.exc import IntegrityError
@@ -65,7 +65,9 @@ async def books_update(
     if updated:
         return {"message": "book updated"}
 
-    return JSONResponse(content={"message": "book not found"}, status_code=404)
+    return JSONResponse(
+        content={"message": "book not found"}, status_code=status.HTTP_404_NOT_FOUND
+    )
 
 
 @app.delete("/books/{book_id}", dependencies=[Depends(oauth2_scheme)])
