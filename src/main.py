@@ -106,7 +106,7 @@ async def readers_create(
     return reader_model
 
 
-@app.put("/readers/{reader_id}")
+@app.put("/readers/{reader_id}", dependencies=[Depends(oauth2_scheme)])
 async def readers_update(
     reader_id: int, reader: ReaderSchema, db: Session = Depends(get_db_connection)
 ):
