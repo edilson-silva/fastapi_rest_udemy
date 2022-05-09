@@ -135,7 +135,7 @@ async def readers_delete(reader_id: int, db: Session = Depends(get_db_connection
     return JSONResponse(content={"message": "reader not found"}, status_code=404)
 
 
-@app.post("/readers_books")
+@app.post("/readers_books", dependencies=[Depends(oauth2_scheme)])
 async def readers_books_create(
     reader_book: ReaderBookSchema, db: Session = Depends(get_db_connection)
 ):
