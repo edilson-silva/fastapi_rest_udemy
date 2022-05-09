@@ -68,7 +68,7 @@ async def books_update(
     return JSONResponse(content={"message": "book not found"}, status_code=404)
 
 
-@app.delete("/books/{book_id}")
+@app.delete("/books/{book_id}", dependencies=[Depends(oauth2_scheme)])
 async def books_delete(book_id: int, db: Session = Depends(get_db_connection)):
     deleted = db.query(BookModel).filter(BookModel.id == book_id).delete()
     db.commit()
