@@ -168,7 +168,8 @@ async def users_create(
 
     if found_user:
         return JSONResponse(
-            content={"message": "email already in use"}, status_code=404
+            content={"message": "email already in use"},
+            status_code=status.HTTP_409_CONFLICT,
         )
 
     crypt = Crypt()
