@@ -7,7 +7,8 @@ Course based project [Complete FastAPI REST course + AWS + Emails + Payments cod
 ### List of concepts:
 - Clean Architecture
 - Clean Code
-- migrations
+- Migrations
+- Conventional Commits
 
 ### Tool list:
 - [FastAPI](https://fastapi.tiangolo.com/) - Web Framework
