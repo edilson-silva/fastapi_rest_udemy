@@ -12,15 +12,8 @@ from .token import TOKEN_ALGORITHM
 
 
 class CustomHTTPHeaderHandler(HTTPBearer):
-    def __init__(
-        self,
-        *,
-        bearerFormat: Optional[str] = None,
-        scheme_name: Optional[str] = None,
-        description: Optional[str] = None,
-        auto_error: bool = True
-    ):
-        super().__init__(bearerFormat, scheme_name, description, auto_error)
+    def __init__(self):
+        super().__init__()
         self.db = next(get_db_connection())
 
     async def __call__(
