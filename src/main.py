@@ -52,7 +52,7 @@ async def books_create(book: BookSchema, db: Session = Depends(get_db_connection
     return book_model
 
 
-@app.put("/books/{book_id}")
+@app.put("/books/{book_id}", dependencies=[Depends(oauth2_scheme)])
 async def books_update(
     book_id: int, book: BookSchema, db: Session = Depends(get_db_connection)
 ):
