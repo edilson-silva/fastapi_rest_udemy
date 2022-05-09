@@ -78,7 +78,9 @@ async def books_delete(book_id: int, db: Session = Depends(get_db_connection)):
     if deleted:
         return {"message": "book deleted"}
 
-    return JSONResponse(content={"message": "book not found"}, status_code=404)
+    return JSONResponse(
+        content={"message": "book not found"}, status_code=status.HTTP_404_NOT_FOUND
+    )
 
 
 @app.get(
